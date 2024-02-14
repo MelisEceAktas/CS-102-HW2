@@ -1,5 +1,8 @@
-public class SimplifiedOkeyGame {
+import java.util.Random;
 
+public class SimplifiedOkeyGame {
+    
+    Random random;
     Player[] players;
     Tile[] tiles;
     int tileCount;
@@ -10,6 +13,7 @@ public class SimplifiedOkeyGame {
 
     public SimplifiedOkeyGame() {
         players = new Player[4];
+        random = new Random();
     }
 
     public void createTiles() {
@@ -27,46 +31,64 @@ public class SimplifiedOkeyGame {
     }
 
     /*
-     * TODO (DORUK): distributes the starting tiles to the players
+     * (DORUK): distributes the starting tiles to the players
      * player at index 0 gets 15 tiles and starts first
      * other players get 14 tiles, this method assumes the tiles are already shuffled
      */
     public void distributeTilesToPlayers() {
-
+        this.players[0].playerTiles[14] = tiles[14];
+        for (int j = 0; j < 4; j++) {
+            for (int i = 0; i < 14; i++) {
+                this.players[j].playerTiles[i] = tiles[i + j * 14];
+            }
+        }    
     }
 
     /*
-     * TODO (DORUK): get the last discarded tile for the current player
+     * (DORUK): get the last discarded tile for the current player
      * (this simulates picking up the tile discarded by the previous player)
      * it should return the toString method of the tile so that we can print what we picked
      */
     public String getLastDiscardedTile() {
-        return null;
+        return this.lastDiscardedTile.toString();
     }
 
     /*
-     * TODO (DORUK): get the top tile from tiles array for the current player
+     * (DORUK): get the top tile from tiles array for the current player
      * that tile is no longer in the tiles array (this simulates picking up the top tile)
      * and it will be given to the current player
      * returns the toString method of the tile so that we can print what we picked
      */
     public String getTopTile() {
-        return null;
+        return this.tiles[this.tiles.length - 1].toString();
     }
 
     /*
-     * TODO (DORUK): should randomly shuffle the tiles array before game starts
+     * (DORUK): should randomly shuffle the tiles array before game starts
      */
     public void shuffleTiles() {
-
+        int index;
+        for (int i = tiles.length - 1; i > 0; i--) {
+            index = random.nextInt(i + 1);
+            if (index != i) {
+                Tile temp = tiles[index];
+                tiles[index] = tiles[i];
+                tiles[i] = temp;
+            }
+        }
     }
 
     /*
-     * TODO (DORUK): check if game still continues, should return true if current player
+     * (DORUK): check if game still continues, should return true if current player
      * finished the game. use checkWinning method of the player class to determine
      */
     public boolean didGameFinish() {
-        return false;
+        for (Player player : players) {
+            if (player.checkWinning()) {
+                return true;
+            }
+        }
+        return !this.hasMoreTileInStack();
     }
 
     /* TODO (brtcrt): finds the player who has the highest number for the longest chain
