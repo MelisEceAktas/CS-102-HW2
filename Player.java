@@ -10,71 +10,42 @@ public class Player {
     }
 
     /*
-     * checks this player's hand to determine if this player is winning
+     * TODO (MELIS): checks this player's hand to determine if this player is winning
      * the player with a complete chain of 14 consecutive numbers wins the game
      * note that the player whose turn is now draws one extra tile to have 15 tiles in hand,
      * and the extra tile does not disturb the longest chain and therefore the winning condition
      * check the assigment text for more details on winning condition
      */
     public boolean checkWinning() {
-        if(findLongestChain() >= 14 ){return true;}
         return false;
     }
 
     /*
-     * used for finding the longest chain in this player hand
+     * TODO (MELIS): used for finding the longest chain in this player hand
      * this method should iterate over playerTiles to find the longest chain
      * of consecutive numbers, used for checking the winning condition
      * and also for determining the winner if tile stack has no tiles
      */
     public int findLongestChain() {
         int longestChain = 0;
-        int chain = 0;
-        for(int i = 0; i < numberOfTiles - 1; i++){
-            if(playerTiles[i].canFormChainWith((playerTiles[i + 1]))){
-                chain++;
-            }
-            else{
-                chain = 0;
-            }
-            if(chain > longestChain){
-                longestChain = chain;
-            }
-        }
+
         return longestChain;
     }
 
     /*
-     * removes and returns the tile in given index position
+     * TODO (MELIS): removes and returns the tile in given index position
      */
     public Tile getAndRemoveTile(int index) {
-        if(numberOfTiles < index){
-            return null;
-        }
-        Tile key = playerTiles[index];
-        for(int j = index; j < numberOfTiles - 1; j++){
-            playerTiles[j] = playerTiles[j + 1];
-        }
-        return key;
+        return null;
     }
 
     /*
-     * adds the given tile to this player's hand keeping the ascending order
+     * TODO (MELIS): adds the given tile to this player's hand keeping the ascending order
      * this requires you to loop over the existing tiles to find the correct position,
      * then shift the remaining tiles to the right by one
      */
     public void addTile(Tile t) {
-        for(int i = 0; i < playerTiles.length; i++){
-            if(playerTiles[i].getValue()>= t.getValue()){
-                for(int j = numberOfTiles - 1; j > i; j--){
-                    playerTiles[j + 1] = playerTiles[j];
-                }
-                playerTiles[i] = t;
-                break;
-            }
-        }
-        if( playerTiles.length == 0){playerTiles[0] = t;}
-        this.numberOfTiles ++;
+
     }
 
     /*
@@ -112,5 +83,4 @@ public class Player {
     public String getName() {
         return playerName;
     }
-    
 }
