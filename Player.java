@@ -17,6 +17,9 @@ public class Player {
      * check the assigment text for more details on winning condition
      */
     public boolean checkWinning() {
+        if(findLongestChain() >= 14 ){
+            return true;
+        }
         return false;
     }
 
@@ -28,7 +31,18 @@ public class Player {
      */
     public int findLongestChain() {
         int longestChain = 0;
-
+        int chain = 0;
+        for(int i = 0; i < numberOfTiles - 1; i++){
+            if(playerTiles[i].canFormChainWith((playerTiles[i + 1]))){
+                chain++;
+            }
+            else{
+                chain = 0;
+            }
+            if(chain > longestChain){
+                longestChain = chain;
+            }
+        }
         return longestChain;
     }
 
@@ -36,7 +50,14 @@ public class Player {
      * TODO (MELIS): removes and returns the tile in given index position
      */
     public Tile getAndRemoveTile(int index) {
-        return null;
+        if(numberOfTiles < index){
+            return null;
+        }
+        Tile key = playerTiles[index];
+        for(int j = index; j < numberOfTiles - 1; j++){
+            playerTiles[j] = playerTiles[j + 1];
+        }
+        return key;
     }
 
     /*
@@ -45,7 +66,19 @@ public class Player {
      * then shift the remaining tiles to the right by one
      */
     public void addTile(Tile t) {
-
+        for(int i = 0; i < playerTiles.length; i++){
+            if(playerTiles[i].getValue()>= t.getValue()){
+                for(int j = numberOfTiles - 1; j > i; j--){
+                    playerTiles[j + 1] = playerTiles[j];
+                }
+                playerTiles[i] = t;
+                break;
+            }
+        }
+        if( playerTiles.length == 0){
+            playerTiles[0] = t;
+        }
+        this.numberOfTiles ++;
     }
 
     /*
