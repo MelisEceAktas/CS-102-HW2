@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Random;
 
 public class SimplifiedOkeyGame {
@@ -93,12 +94,29 @@ public class SimplifiedOkeyGame {
         return !this.hasMoreTileInStack();
     }
 
-    /* TODO (brtcrt): finds the player who has the highest number for the longest chain
+    /* (brtcrt): finds the player who has the highest number for the longest chain
      * if multiple players have the same length may return multiple players
+     * Trying to do this in a single loop and I'm gonna k*ll myself so I won't even bother.
      */
     public Player[] getPlayerWithHighestLongestChain() {
-        Player[] winners = new Player[1];
-
+        int winnerCount = 1;
+        int targetLength = this.players[0].findLongestChain();
+        for (int i = 1; i < this.players.length; i++) {
+            if (targetLength == this.players[i].findLongestChain()) {
+                winnerCount++;
+            } else if (targetLength < this.players[i].findLongestChain()) {
+                winnerCount = 1;
+                targetLength = this.players[i].findLongestChain();
+            }
+        }
+        Player[] winners = new Player[winnerCount];
+        int j = 0;
+        for (int i = 0; i < this.players.length; i++) {
+            if (this.players[i].findLongestChain() == targetLength) {
+                winners[j] = this.players[i];
+                j++;
+            }
+        }
         return winners;
     }
     
@@ -110,30 +128,116 @@ public class SimplifiedOkeyGame {
     }
 
     /*
-     * TODO (brtcrt): pick a tile for the current computer player using one of the following:
+     * (brtcrt): pick a tile for the current computer player using one of the following:
      * - picking from the tiles array using getTopTile()
      * - picking from the lastDiscardedTile using getLastDiscardedTile()
      * you should check if getting the discarded tile is useful for the computer
      * by checking if it increases the longest chain length, if not get the top tile
      */
     public void pickTileForComputer() {
+        Player currentPlayer = this.players[this.currentPlayerIndex];
+        Tile[] playerTiles = currentPlayer.getTiles();
+        // check the last discarded tile first
+        Tile ldt = this.lastDiscardedTile;
+        for (int i = 0; i < playerTiles.length; i++) {
+            if (ldt.canFormChainWith(playerTiles[i])) {
+                if (playerTiles[i + 1] == null) {
+                    currentPlayer.addTile(ldt);
+                    return;
+                } else if (ldt.getValue() != playerTiles[i+1].getValue()) {
+                    currentPlayer.addTile(ldt);
+                    return;
+                }
+            }
+        }
+        // if ldt is not useful, ğick from pile
+        currentPlayer.addTile(this.tiles[this.tiles.length - 1]);
+        return;
 
-    }
+    }   
 
     /*
-     * TODO (brtcrt): Current computer player will discard the least useful tile.
+     * (brtcrt): Current computer player will discard the least useful tile.
      * you may choose based on how useful each tile is
      */
     public void discardTileForComputer() {
-
+        // discard the tile if it doesn't make a chain
+        // if no such tile exists, then discard a tile from the smallest chain
+        Player currentPlayer = this.players[this.currentPlayerIndex];
+        Tile[] playerTiles = currentPlayer.getTiles();
+        ArrayList<ArrayList<Integer>> chains = this.findChains(playerTiles);
+        for (int i = 0; i < playerTiles.length; i++) {
+            //Tile cTile = playerTiles[i];
+            if (!this.inChain(chains, i)) {
+                currentPlayer.getAndRemoveTile(i);
+            } else {
+                // find smalles chain
+                ArrayList<Integer> small = chains.get(this.smallestChain(chains));
+                currentPlayer.getAndRemoveTile(small.get(0));
+            }
+        }
     }
 
     /*
-     * TODO (brtcrt): discards the current player's tile at given index
+     * Finds all the chains in a given array of tiles
+     */
+    private ArrayList<ArrayList<Integer>> findChains(Tile[] tiles) {
+        // [[chain1 indexes], [chain 2 indexes]]
+        int chainIndex = 0;
+        boolean endedChain = false;
+        ArrayList<ArrayList<Integer>> chains = new ArrayList<ArrayList<Integer>>();
+        for (int i = 0; i < tiles.length - 1; i++) {
+            Tile cTile = tiles[i];
+            Tile next = tiles[i + 1];
+            if (cTile.canFormChainWith(next)) {
+                endedChain = false;
+                chains.get(chainIndex).add(i + 1);
+                if (i == 0) {
+                    chains.get(chainIndex).add(i);
+                }
+            } else {
+                if (!endedChain) {
+                    chainIndex++;
+                    endedChain = true;
+                }
+            }
+        }
+
+        return chains;
+    }
+
+    /*
+     * Checks if a given index is a member of a chain
+     */
+    private boolean inChain(ArrayList<ArrayList<Integer>> chains, int i) {
+        for (ArrayList<Integer> chain : chains) {
+            if (chain.contains(i)) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    private int smallestChain(ArrayList<ArrayList<Integer>> chains) {
+        int smallest = 0;
+        for (int i = 1; i < chains.size() - 1; i++) {
+            if (chains.get(i).size() < chains.get(smallest).size()) {
+                smallest = i;
+            }
+        }
+        return smallest;
+    }
+
+    /*
+     * (brtcrt): discards the current player's tile at given index
      * this should set lastDiscardedTile variable and remove that tile from
      * that player's tiles
      */
     public void discardTile(int tileIndex) {
+        Tile lastTile = this.players[this.currentPlayerIndex].getAndRemoveTile(tileIndex);
+        this.lastDiscardedTile = lastTile;
+
 
     }
 
