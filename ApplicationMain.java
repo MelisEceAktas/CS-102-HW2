@@ -79,6 +79,18 @@ public class ApplicationMain {
                     playerChoice = sc.nextInt();
 
                     // TODO (KAAN): make sure the given index is correct, should be 0 <= index <= 14
+                    if (playerChoice < 0 || playerChoice > 14){
+                        boolean isInputCorrect = false;
+
+                        while (!isInputCorrect){
+                            System.out.print("Please enter an index between 0 and 14: ");
+                            playerChoice = sc.nextInt();
+                        
+                            if (!(playerChoice < 0) && !(playerChoice > 14)){
+                                isInputCorrect = true;
+                            }
+                        }
+                    }
 
                     game.discardTile(playerChoice);
                     game.passTurnToNextPlayer();
@@ -92,6 +104,8 @@ public class ApplicationMain {
                         // TODO (KAAN): the game ended with no more tiles in the stack
                         // determine the winner based on longest chain lengths of the players
                         // use getPlayerWithHighestLongestChain method of game for this task
+
+                        System.out.println("No more tiles left in the stack, " + game.getPlayerWithHighestLongestChain() + "win(s)!");
                     }
                 }
             }
@@ -120,6 +134,8 @@ public class ApplicationMain {
                         // TODO (KAAN): the game ended with no more tiles in the stack
                         // determine the winner based on longest chain lengths of the players
                         // use getPlayerWithHighestLongestChain method of game for this task
+
+                        System.out.println("No more tiles left in the stack, " + game.getPlayerWithHighestLongestChain() + "win(s)!");
                     }
                 }
             }
