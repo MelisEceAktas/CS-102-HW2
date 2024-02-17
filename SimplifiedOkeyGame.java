@@ -160,6 +160,9 @@ public class SimplifiedOkeyGame {
                   getLastDiscardedTile();
                   return;
                 }
+                else{
+                    getTopTile();
+                }
             }
         }
         // if ldt is not useful, pick from pile
