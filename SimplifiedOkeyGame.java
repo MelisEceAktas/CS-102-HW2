@@ -177,7 +177,7 @@ public class SimplifiedOkeyGame {
         for (int i = 0; i < playerTiles.length; i++) {
             // if tile is not part of a chain ~brtcrt
             if (!this.inChain(chains, i)) {
-                currentPlayer.getAndRemoveTile(i);
+                this.lastDiscardedTile = currentPlayer.getAndRemoveTile(i); // wasn't updating last discarded tile ~brtcrt
                 return;
             }
             // i was doing some goofy stuff here and not returning idk but it should be fixed now ~brtcrt
@@ -185,7 +185,7 @@ public class SimplifiedOkeyGame {
         // if all tiles belong to a chain    
         // find smallest chain and remove first ~brtcrt
         ArrayList<Integer> small = chains.get(this.smallestChain(chains));
-        currentPlayer.getAndRemoveTile(small.get(0));
+        this.lastDiscardedTile = currentPlayer.getAndRemoveTile(small.get(0));
         return;
     
     }
