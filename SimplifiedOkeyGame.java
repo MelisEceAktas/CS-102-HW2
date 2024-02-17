@@ -160,8 +160,9 @@ public class SimplifiedOkeyGame {
                   getLastDiscardedTile();
                   return;
                 }
-                else{
+                else{//there is a multiple of tile
                     getTopTile();
+                    return;
                 }
             }
         }
