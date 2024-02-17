@@ -73,7 +73,8 @@ public class SimplifiedOkeyGame {
      */
     public String getTopTile() {
         this.players[this.currentPlayerIndex].addTile(this.tiles[this.tileCount - 1]); // add the top tile to the player's hand ~brtcrt
-        return this.tiles[this.tileCount - 1].toString(); // this should be dependent on tileCount and not array length ~brtcrt
+        tileCount--;
+        return this.tiles[this.tileCount].toString(); // this should be dependent on tileCount and not array length ~brtcrt
     }
 
     /*
@@ -152,17 +153,17 @@ public class SimplifiedOkeyGame {
         for (int i = 0; i < currentPlayer.numberOfTiles - 1; i++) { // also could have hard-coded it to be playerTiles.length - 1 since it will always be 14
             if (ldt.canFormChainWith(playerTiles[i])) {
                 if (playerTiles[i + 1] == null) {
-                    currentPlayer.addTile(ldt);
+                    getLastDiscardedTile();
                     return;
-                } else if (ldt.getValue() != playerTiles[i+1].getValue()) {
-                    currentPlayer.addTile(ldt);
-                    return;
+                }
+                else if (ldt.getValue() != playerTiles[i+1].getValue()) {
+                  getLastDiscardedTile();
+                  return;
                 }
             }
         }
         // if ldt is not useful, pick from pile
-        currentPlayer.addTile(this.tiles[this.tileCount - 1]); // this should also be dependent on tileCount ~brtcrt
-        tileCount--;
+        getTopTile(); // this should also be dependent on tileCount ~brtcrt
         return;
 
     }   
