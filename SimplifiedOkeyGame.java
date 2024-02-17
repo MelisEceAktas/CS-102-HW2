@@ -60,6 +60,8 @@ public class SimplifiedOkeyGame {
      * it should return the toString method of the tile so that we can print what we picked
      */
     public String getLastDiscardedTile() {
+        this.players[this.currentPlayerIndex].addTile(this.lastDiscardedTile); // we should also add the tile to the player's hand ~brtcrt
+        // TODO Should we set this to null as well? Or maybe use an ArrayList instead. This is kinda dumb imo. ~brtcrt  
         return this.lastDiscardedTile.toString();
     }
 
@@ -70,7 +72,8 @@ public class SimplifiedOkeyGame {
      * returns the toString method of the tile so that we can print what we picked
      */
     public String getTopTile() {
-        return this.tiles[this.tiles.length - 1].toString();
+        this.players[this.currentPlayerIndex].addTile(this.tiles[this.tileCount - 1]); // add the top tile to the player's hand ~brtcrt
+        return this.tiles[this.tileCount - 1].toString(); // this should be dependent on tileCount and not array length ~brtcrt
     }
 
     /*
@@ -158,7 +161,7 @@ public class SimplifiedOkeyGame {
             }
         }
         // if ldt is not useful, pick from pile
-        currentPlayer.addTile(this.tiles[this.tiles.length - 1]);
+        currentPlayer.addTile(this.tiles[this.tileCount - 1]); // this should also be dependent on tileCount ~brtcrt
         tileCount--;
         return;
 
