@@ -38,11 +38,18 @@ public class SimplifiedOkeyGame {
      */
     public void distributeTilesToPlayers() {
         for (int i = 0; i < this.players[0].playerTiles.length; i++) {
-            this.players[0].playerTiles[i] = tiles[i];
+            //this.players[0].playerTiles[i] = tiles[i];
+            // ^ instead of this, use player.addTile(); ~brtcrt
+            this.players[0].addTile(tiles[i]); 
+            // also decrease tile count
+            this.tileCount--;
         }
         for (int j = 1; j < 4; j++) {
             for (int i = 0; i < 14; i++) {
-                this.players[j].playerTiles[i] = tiles[i + 1 + j * 14];
+                //this.players[j].playerTiles[i] = tiles[i + 1 + j * 14];
+                // ^ same thing here as well ~brtcrt
+                this.players[j].addTile(tiles[i + 1 + j * 14]);
+                this.tileCount--;
             }
         }    
     }
@@ -139,7 +146,7 @@ public class SimplifiedOkeyGame {
         Tile[] playerTiles = currentPlayer.getTiles();
         // check the last discarded tile first
         Tile ldt = this.lastDiscardedTile;
-        for (int i = 0; i < playerTiles.length; i++) {
+        for (int i = 0; i < currentPlayer.numberOfTiles - 1; i++) { // also could have hard-coded it to be playerTiles.length - 1 since it will always be 14
             if (ldt.canFormChainWith(playerTiles[i])) {
                 if (playerTiles[i + 1] == null) {
                     currentPlayer.addTile(ldt);
@@ -150,8 +157,9 @@ public class SimplifiedOkeyGame {
                 }
             }
         }
-        // if ldt is not useful, ğick from pile
+        // if ldt is not useful, pick from pile
         currentPlayer.addTile(this.tiles[this.tiles.length - 1]);
+        tileCount--;
         return;
 
     }   
@@ -167,15 +175,19 @@ public class SimplifiedOkeyGame {
         Tile[] playerTiles = currentPlayer.getTiles();
         ArrayList<ArrayList<Integer>> chains = this.findChains(playerTiles);
         for (int i = 0; i < playerTiles.length; i++) {
-            //Tile cTile = playerTiles[i];
+            // if tile is not part of a chain ~brtcrt
             if (!this.inChain(chains, i)) {
                 currentPlayer.getAndRemoveTile(i);
-            } else {
-                // find smalles chain
-                ArrayList<Integer> small = chains.get(this.smallestChain(chains));
-                currentPlayer.getAndRemoveTile(small.get(0));
+                return;
             }
+            // i was doing some goofy stuff here and not returning idk but it should be fixed now ~brtcrt
         }
+        // if all tiles belong to a chain    
+        // find smallest chain and remove first ~brtcrt
+        ArrayList<Integer> small = chains.get(this.smallestChain(chains));
+        currentPlayer.getAndRemoveTile(small.get(0));
+        return;
+    
     }
 
     /*
@@ -184,21 +196,27 @@ public class SimplifiedOkeyGame {
     private ArrayList<ArrayList<Integer>> findChains(Tile[] tiles) {
         // [[chain1 indexes], [chain 2 indexes]]
         int chainIndex = 0;
-        boolean endedChain = false;
+        boolean endedChain = true;
+        boolean newChain = true;
         ArrayList<ArrayList<Integer>> chains = new ArrayList<ArrayList<Integer>>();
+        chains.add(new ArrayList<Integer>()); // i forgot to initialise the arraylist ~brtcrt
         for (int i = 0; i < tiles.length - 1; i++) {
             Tile cTile = tiles[i];
             Tile next = tiles[i + 1];
             if (cTile.canFormChainWith(next)) {
                 endedChain = false;
                 chains.get(chainIndex).add(i + 1);
-                if (i == 0) {
-                    chains.get(chainIndex).add(i);
+                if (newChain) {
+                    newChain = false;
+                    chains.get(chainIndex).add(i + 1);
+                    chains.get(chainIndex).set(0, i);
                 }
             } else {
                 if (!endedChain) {
                     chainIndex++;
+                    chains.add(new ArrayList<Integer>()); // < same here ~brtcrt
                     endedChain = true;
+                    newChain = true;
                 }
             }
         }

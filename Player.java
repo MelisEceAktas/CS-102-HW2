@@ -57,6 +57,10 @@ public class Player {
         for(int j = index; j < numberOfTiles - 1; j++){
             playerTiles[j] = playerTiles[j + 1];
         }
+        // after shifting, also make the last index null ~brtcrt
+        this.playerTiles[this.playerTiles.length - 1] = null;
+        // also decrease number of tiles. ~brtcrt
+        this.numberOfTiles--;
         return key;
     }
 
@@ -66,19 +70,26 @@ public class Player {
      * then shift the remaining tiles to the right by one
      */
     public void addTile(Tile t) {
-        for(int i = 0; i < playerTiles.length; i++){
+        if( this.numberOfTiles == 0){ // this was at the bottom. should be here I think, although it may not actually matter ~brtcrt
+            playerTiles[0] = t;
+            this.numberOfTiles++;
+            return;
+        }
+        for(int i = 0; i < this.numberOfTiles; i++){ // we were using playerTiles.length, should be numberOfTiles i think ~brtcrt
             if(playerTiles[i].getValue()>= t.getValue()){
-                for(int j = numberOfTiles - 1; j > i; j--){
+                for(int j = this.numberOfTiles - 1; j >= i; j--){
                     playerTiles[j + 1] = playerTiles[j];
                 }
                 playerTiles[i] = t;
-                break;
+                // break;  should return when we have placed the tile ~brtcrt
+                this.numberOfTiles++;
+                return;
             }
         }
-        if( playerTiles.length == 0){
-            playerTiles[0] = t;
-        }
-        this.numberOfTiles ++;
+        // and we should place the tile at the last position if it has the biggest value~brtcrt
+        this.playerTiles[this.numberOfTiles] = t;
+        this.numberOfTiles++;
+        return;
     }
 
     /*
