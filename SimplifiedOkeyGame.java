@@ -61,7 +61,7 @@ public class SimplifiedOkeyGame {
      */
     public String getLastDiscardedTile() {
         this.players[this.currentPlayerIndex].addTile(this.lastDiscardedTile); // we should also add the tile to the player's hand ~brtcrt
-        // TODO Should we set this to null as well? Or maybe use an ArrayList instead. This is kinda dumb imo. ~brtcrt  
+        // Should we set this to null as well? Or maybe use an ArrayList instead. This is kinda dumb imo. Nevermind this is fine I'm just retarded. ~brtcrt  
         return this.lastDiscardedTile.toString();
     }
 
@@ -150,7 +150,7 @@ public class SimplifiedOkeyGame {
         Tile[] playerTiles = currentPlayer.getTiles();
         // check the last discarded tile first
         Tile ldt = this.lastDiscardedTile;
-        for (int i = 0; i < currentPlayer.numberOfTiles - 1; i++) { // also could have hard-coded it to be playerTiles.length - 1 since it will always be 14
+        for (int i = 0; i < currentPlayer.numberOfTiles - 1; i++) { // also could have hard-coded it to be playerTiles.length - 1 since it will always be 14 ~brtcrt
             if (ldt.canFormChainWith(playerTiles[i])) {
                 if (playerTiles[i + 1] == null) {
                     getLastDiscardedTile();
@@ -161,7 +161,7 @@ public class SimplifiedOkeyGame {
                   return;
                 }
                 else{//there is a multiple of tile
-                    getTopTile();
+                    getTopTile(); // I don't know if we need this but I guess it works? ~brtcrt
                     return;
                 }
             }
@@ -181,6 +181,15 @@ public class SimplifiedOkeyGame {
         // if no such tile exists, then discard a tile from the smallest chain
         Player currentPlayer = this.players[this.currentPlayerIndex];
         Tile[] playerTiles = currentPlayer.getTiles();
+        // before looking for chain, look for duplicates ~brtcrt
+        int[] duplicates = this.findDuplicates(playerTiles);
+        for (int i = 0; i < playerTiles.length; i++) {
+            if (duplicates[i] == 1) {
+                this.lastDiscardedTile = currentPlayer.getAndRemoveTile(i);
+                return;
+            }
+        }
+        // if there are no duplicates, look for chains ~brtcrt
         ArrayList<ArrayList<Integer>> chains = this.findChains(playerTiles);
         for (int i = 0; i < playerTiles.length; i++) {
             // if tile is not part of a chain ~brtcrt
@@ -196,6 +205,23 @@ public class SimplifiedOkeyGame {
         this.lastDiscardedTile = currentPlayer.getAndRemoveTile(small.get(0));
         return;
     
+    }
+
+    /*
+     * Finds duplicate tiles in a given array of tiles
+     */
+    private int[] findDuplicates(Tile[] tiles) {
+        // returns something like {0, 0, 0, 0, 1, 1, 1, 0, 0, 0}  
+        // in which 0 means the tile at that index is not a duplicate
+        // and 1 means the tile at that index is a duplicate
+        int[] duplicates = new int[tiles.length];
+        for (int i = 0; i < tiles.length - 1; i++) {
+            if (tiles[i].getValue() == tiles[i + 1].getValue()) {
+                duplicates[i + 1] = 1;
+            }
+        }
+        return duplicates;
+
     }
 
     /*
