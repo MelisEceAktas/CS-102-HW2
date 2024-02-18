@@ -105,7 +105,10 @@ public class ApplicationMain {
                         // determine the winner based on longest chain lengths of the players
                         // use getPlayerWithHighestLongestChain method of game for this task
 
-                        System.out.println("No more tiles left in the stack, " + game.getPlayerWithHighestLongestChain() + "win(s)!");
+                        System.out.print("No more tiles left in the stack, ");
+                        printPlayers(game.getPlayerWithHighestLongestChain()); // Now printing player names instead of reference ~ omer
+                        System.out.println(" wins !");
+
                     }
                 }
             }
@@ -135,12 +138,34 @@ public class ApplicationMain {
                         // determine the winner based on longest chain lengths of the players
                         // use getPlayerWithHighestLongestChain method of game for this task
 
-                        System.out.println("No more tiles left in the stack, " + game.getPlayerWithHighestLongestChain() + "win(s)!");
+                        System.out.print("No more tiles left in the stack, ");
+                        printPlayers(game.getPlayerWithHighestLongestChain()); // Now printing player names instead of reference ~ omer
+                        System.out.println(" wins !");
                     }
                 }
             }
         }
 
         sc.close();
+    }
+
+    public static void printPlayers(Player[] players)
+    {
+        if (players.length == 1)
+        {
+            System.out.print(players[0].getName());
+        }
+        else if (players.length == 2)
+        {
+            System.out.print(players[0].getName() + " and " + players[1].getName());
+        }
+        else
+        {
+            for (int i = 0; i < players.length - 1; i ++)
+            {
+                System.out.print(players[i].getName() + ", ");
+            }
+            System.out.print("and " + players[players.length - 1].getName());
+        }
     }
 }
