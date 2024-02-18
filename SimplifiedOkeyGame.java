@@ -152,18 +152,14 @@ public class SimplifiedOkeyGame {
         Tile ldt = this.lastDiscardedTile;
         for (int i = 0; i < currentPlayer.numberOfTiles - 1; i++) { // also could have hard-coded it to be playerTiles.length - 1 since it will always be 14 ~brtcrt
             if (ldt.canFormChainWith(playerTiles[i])) {
-                if (playerTiles[i + 1] == null) {
+                if (playerTiles[i + 1] == null || i == 0) {
                     getLastDiscardedTile();
                     return;
                 }
-                else if (ldt.getValue() != playerTiles[i+1].getValue()) {
+                else if (ldt.getValue() != playerTiles[i + 1].getValue() && ldt.getValue() != playerTiles[i - 1].getValue()) { // was checking the tile in front but not the tile in back ~brtcrt
                   getLastDiscardedTile();
                   return;
-                }
-                else{//there is a multiple of tile
-                    getTopTile(); // I don't know if we need this but I guess it works? ~brtcrt
-                    return;
-                }
+                } // so we don't need an else statement here as we pick from pile after this for is finished ~brtcrt
             }
         }
         // if ldt is not useful, pick from pile

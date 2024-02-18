@@ -78,7 +78,7 @@ public class ApplicationMain {
                     System.out.print("Discard the tile in index: ");
                     playerChoice = sc.nextInt();
 
-                    // TODO (KAAN): make sure the given index is correct, should be 0 <= index <= 14
+                    // (KAAN): make sure the given index is correct, should be 0 <= index <= 14
                     if (playerChoice < 0 || playerChoice > 14){
                         boolean isInputCorrect = false;
 
@@ -101,7 +101,7 @@ public class ApplicationMain {
                         System.out.println("Congratulations, you win!");    
                     }
                     else{
-                        // TODO (KAAN): the game ended with no more tiles in the stack
+                        // (KAAN): the game ended with no more tiles in the stack
                         // determine the winner based on longest chain lengths of the players
                         // use getPlayerWithHighestLongestChain method of game for this task
 
@@ -134,7 +134,7 @@ public class ApplicationMain {
                         System.out.println(game.getCurrentPlayerName() + " wins.");
                     }
                     else{
-                        // TODO (KAAN): the game ended with no more tiles in the stack
+                        // (KAAN): the game ended with no more tiles in the stack
                         // determine the winner based on longest chain lengths of the players
                         // use getPlayerWithHighestLongestChain method of game for this task
 

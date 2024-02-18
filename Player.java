@@ -10,7 +10,7 @@ public class Player {
     }
 
     /*
-     * TODO (MELIS): checks this player's hand to determine if this player is winning
+     * (MELIS): checks this player's hand to determine if this player is winning
      * the player with a complete chain of 14 consecutive numbers wins the game
      * note that the player whose turn is now draws one extra tile to have 15 tiles in hand,
      * and the extra tile does not disturb the longest chain and therefore the winning condition
@@ -24,7 +24,7 @@ public class Player {
     }
 
     /*
-     * TODO (MELIS): used for finding the longest chain in this player hand
+     * (MELIS): used for finding the longest chain in this player hand
      * this method should iterate over playerTiles to find the longest chain
      * of consecutive numbers, used for checking the winning condition
      * and also for determining the winner if tile stack has no tiles
@@ -47,7 +47,7 @@ public class Player {
     }
 
     /*
-     * TODO (MELIS): removes and returns the tile in given index position
+     * (MELIS): removes and returns the tile in given index position
      */
     public Tile getAndRemoveTile(int index) {
         if(numberOfTiles < index){
@@ -65,7 +65,7 @@ public class Player {
     }
 
     /*
-     * TODO (MELIS): adds the given tile to this player's hand keeping the ascending order
+     * (MELIS): adds the given tile to this player's hand keeping the ascending order
      * this requires you to loop over the existing tiles to find the correct position,
      * then shift the remaining tiles to the right by one
      */
