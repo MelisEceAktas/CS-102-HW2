@@ -52,6 +52,17 @@ public class ApplicationMain {
                 System.out.print("Your choice: ");
                 playerChoice = sc.nextInt();
 
+                // Input validation for start of the turn. (Doruk)
+                boolean isChoiceValid;
+                do {
+                    isChoiceValid = (firstTurn && playerChoice == 1) || (!firstTurn && (playerChoice == 1 || playerChoice == 2));
+                    if (!isChoiceValid) {
+                        System.out.print("Please enter a valid choice: ");
+                        playerChoice = sc.nextInt();
+                    }
+                }
+                while (!isChoiceValid);
+
                 // after the first turn we can pick up
                 if(!firstTurn) {
                     if(playerChoice == 1) {
@@ -80,7 +91,7 @@ public class ApplicationMain {
 
                     // (KAAN): make sure the given index is correct, should be 0 <= index <= 14
                     if (playerChoice < 0 || playerChoice > 14){
-                        boolean isInputCorrect = false;
+                        Boolean isInputCorrect = false;
 
                         while (!isInputCorrect){
                             System.out.print("Please enter an index between 0 and 14: ");
