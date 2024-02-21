@@ -148,16 +148,16 @@ public class SimplifiedOkeyGame {
         Tile[] playerTiles = currentPlayer.getTiles();
         // check the last discarded tile first
         Tile ldt = this.lastDiscardedTile;
+        if (this.hasDuplicate(playerTiles, ldt)) {
+            // if there exists a duplicate of ldt ~brtcrt
+            // are you happy now? ~brtcrt
+            getTopTile();
+            return;
+        }
         for (int i = 0; i < currentPlayer.numberOfTiles - 1; i++) { // also could have hard-coded it to be playerTiles.length - 1 since it will always be 14 ~brtcrt
             if (ldt.canFormChainWith(playerTiles[i])) {
-                if (playerTiles[i + 1] == null || i == 0) {
-                    getLastDiscardedTile();
-                    return;
-                }
-                else if (ldt.getValue() != playerTiles[i + 1].getValue() && ldt.getValue() != playerTiles[i - 1].getValue()) { // was checking the tile in front but not the tile in back ~brtcrt
-                  getLastDiscardedTile();
-                  return;
-                } // so we don't need an else statement here as we pick from pile after this for is finished ~brtcrt
+                getLastDiscardedTile(); // since we check for duplicate beforehand, we don't need to do anymore checks other than canFormChainWith ~brtcrt
+                return;
             }
         }
         // if ldt is not useful, pick from pile
@@ -165,6 +165,21 @@ public class SimplifiedOkeyGame {
         return;
 
     }   
+
+    /*
+     * Checks if a given Tile array arr has a duplicate of a given Tile t
+     */
+    private boolean hasDuplicate(Tile[] arr, Tile t) {
+        boolean foundDuplicate = false;
+        for (int i = 0; i < arr.length - 1; i++) {
+            Tile t_ = arr[i];
+            if (t_.matchingTiles(t)) {
+                foundDuplicate = true;
+                break;
+            }
+        }
+        return foundDuplicate;
+    }
 
     /*
      * (brtcrt): Current computer player will discard the least useful tile.
