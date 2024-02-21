@@ -61,7 +61,6 @@ public class SimplifiedOkeyGame {
      */
     public String getLastDiscardedTile() {
         this.players[this.currentPlayerIndex].addTile(this.lastDiscardedTile); // we should also add the tile to the player's hand ~brtcrt
-        // Should we set this to null as well? Or maybe use an ArrayList instead. This is kinda dumb imo. Nevermind this is fine I'm just retarded. ~brtcrt  
         return this.lastDiscardedTile.toString();
     }
 
@@ -107,7 +106,6 @@ public class SimplifiedOkeyGame {
 
     /* (brtcrt): finds the player who has the highest number for the longest chain
      * if multiple players have the same length may return multiple players
-     * Trying to do this in a single loop and I'm gonna k*ll myself so I won't even bother.
      */
     public Player[] getPlayerWithHighestLongestChain() {
         int winnerCount = 1;
@@ -193,7 +191,6 @@ public class SimplifiedOkeyGame {
                 this.lastDiscardedTile = currentPlayer.getAndRemoveTile(i); // wasn't updating last discarded tile ~brtcrt
                 return;
             }
-            // i was doing some goofy stuff here and not returning idk but it should be fixed now ~brtcrt
         }
         // if all tiles belong to a chain    
         // find smallest chain and remove first ~brtcrt
@@ -229,7 +226,7 @@ public class SimplifiedOkeyGame {
         boolean endedChain = true;
         boolean newChain = true;
         ArrayList<ArrayList<Integer>> chains = new ArrayList<ArrayList<Integer>>();
-        chains.add(new ArrayList<Integer>()); // i forgot to initialise the arraylist ~brtcrt
+        chains.add(new ArrayList<Integer>());
         for (int i = 0; i < tiles.length - 1; i++) {
             Tile cTile = tiles[i];
             Tile next = tiles[i + 1];
@@ -244,7 +241,7 @@ public class SimplifiedOkeyGame {
             } else {
                 if (!endedChain) {
                     chainIndex++;
-                    chains.add(new ArrayList<Integer>()); // < same here ~brtcrt
+                    chains.add(new ArrayList<Integer>()); 
                     endedChain = true;
                     newChain = true;
                 }
